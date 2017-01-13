@@ -1,0 +1,17 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: selden
+ * Date: 2017/1/13
+ * Time: 18:04
+ */
+
+namespace app\[module];
+
+
+use system\WorkerMan;
+
+class Server extends WorkerMan
+{
+
+}

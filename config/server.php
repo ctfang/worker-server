@@ -7,7 +7,9 @@
  */
 return [
     [
-        'module'=>'http/server',
+        // 模块服务
+        'module'=>'http',
+        // 服务配置
         'worker'=>[
             // 协议类型
             'protocol'=>'http',

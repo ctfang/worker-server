@@ -28,10 +28,13 @@ class Config
      * @param $file
      * @return bool
      */
-    public static function get($name, $file='server')
+    public static function get($name=false, $file='server')
     {
         if( !isset(self::$configList[$file]) ){
             self::$configList[$file] = self::getFile($file);
+        }
+        if( $name===false ){
+            return self::$configList[$file];
         }
         return self::$configList[$file][$name];
     }
