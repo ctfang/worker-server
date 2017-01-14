@@ -1,4 +1,19 @@
 {
+    "name": "selden1992/WorkerServer",
+    "description": "傻瓜式搭建soket服务",
+    "type": "project",
+    "keywords": [
+      "framework",
+      "WorkerServer",
+      "soket"
+    ],
+    "license": "Apache-2.0",
+    "authors": [
+      {
+          "name": "cyz",
+          "email": "2206582181@qq.com"
+      }
+    ],
     "require": {
         "php": ">=5.4.0",
         "workerman/workerman": "^3.3"
