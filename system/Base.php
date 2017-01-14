@@ -24,7 +24,7 @@ if( php_sapi_name()=='cli' ){
     }
 }else{
     // 非命令行调用
-
+    
 }
 
 

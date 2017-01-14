@@ -9,7 +9,9 @@
 namespace app\websocket;
 
 
+use app\container\Lists;
 use system\WorkerMan;
+use Workerman\Lib\Timer;
 
 class Server extends WorkerMan
 {
@@ -28,7 +30,14 @@ class Server extends WorkerMan
      */
     public function onConnect($connection)
     {
-
+        // 生成唯一标识
+        $connection->linkId     = uniqid('link_id_');
+        // 保存链接
+        Lists::push($connection->linkId,$connection);
+        $connection->time       = Timer::add(30, function()use($connection){
+            // 30 后没有认证的链接关闭
+            $connection->close();
+        }, null, false);
     }
 
     /**
