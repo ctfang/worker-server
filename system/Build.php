@@ -11,20 +11,31 @@ namespace system;
 
 class Build
 {
-    public static function main()
+    public static function make($list)
     {
-
+        $template = file_get_contents( __DIR__.'/template/Server.temp' );
+        foreach ($list as &$name){
+            $file = APP_PATH.$name.'/Server.php';
+            $sreverString = str_replace(['[module]'],[$name],$template);
+            if( !file_exists($file) ){
+                if( !file_exists(dirname($file)) ){
+                    mkdir(dirname($file),0755,true);
+                }
+                file_put_contents($file,$sreverString);
+            }
+        }
     }
 
-    public static function isBuild()
+    public static function isBuild(&$config)
     {
-        $config = \system\Config::get();
+        $list = [];
         // 文件检测
         foreach ($config as &$arr){
             $file = APP_PATH.$arr['module'].'/Server.php';
-            if( 1 ){
-
+            if( !file_exists($file) ){
+                $list[] = $arr['module'];
             }
         }
+        return $list;
     }
 }

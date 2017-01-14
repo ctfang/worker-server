@@ -7,16 +7,23 @@
  */
 if( php_sapi_name()=='cli' ){
     $config = \system\Config::get();
-    if( !\system\Build::isBuild($config) ){
-        \system\Build::main($config);
-        die("build success");
+    if( $classList = \system\Build::isBuild($config) ){
+        \system\Build::make($classList);
+        echo "Created Successfully\n",
+        "Please re-run\n";
     }else{
+        \Workerman\Worker::$logFile = ROOT_PATH.'runtime/worker.log';
         foreach ($config as &$arr){
-            $class = "";
-            \app\test\server::class;
+            if( $arr['module'] ){
+                $class = '\\app\\'.$arr['module'].'\\Server';
+                new $class($arr['worker']);
+            }
         }
+        // 执行后将永久阻塞
+        \Workerman\Worker::runAll();
     }
 }else{
+    // 非命令行调用
 
 }
 
