@@ -38,3 +38,7 @@ WorkerServer  服务部署目录
 
 3，运行server.php
 
+#### composer安装
+
+composer require selden1992/worker-server
+
