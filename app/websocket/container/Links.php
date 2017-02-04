@@ -6,10 +6,10 @@
  * Time: 18:13
  */
 
-namespace app\container;
+namespace app\websocket\container;
 
 
-class Link
+class Links
 {
     protected static $_list;
 
@@ -18,18 +18,22 @@ class Link
      * @param $key   标识
      * @param $value 引用对象
      */
-    public static function push($key,&$value)
+    public static function push($key,$value)
     {
-
+        self::$_list[$key] = $value;
     }
 
     /**
      * 拉取对象
      * @param $key  标识
+     * @return bool
      */
     public static function pull($key)
     {
-
+        if(isset(self::$_list[$key])){
+            return self::$_list[$key];
+        }
+        return false;
     }
 
     /**
@@ -38,6 +42,8 @@ class Link
      */
     public static function off($key)
     {
-
+        if(isset(self::$_list[$key])){
+            unset(self::$_list[$key]);
+        }
     }
 }

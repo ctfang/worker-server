@@ -9,9 +9,11 @@
 namespace app\websocket;
 
 
-use app\container\Lists;
+use app\websocket\container\Links;
+use app\websocket\container\Users;
+use app\websocket\tool\Route;
+use app\websocket\tool\Send;
 use system\WorkerMan;
-use Workerman\Lib\Timer;
 
 class Server extends WorkerMan
 {
@@ -21,7 +23,7 @@ class Server extends WorkerMan
      */
     public function onWorkerStart($worker)
     {
-
+        Route::main();
     }
 
     /**
@@ -30,14 +32,8 @@ class Server extends WorkerMan
      */
     public function onConnect($connection)
     {
-        // 生成唯一标识
-        $connection->linkId     = uniqid('link_id_');
-        // 保存链接
-        Lists::push($connection->linkId,$connection);
-        $connection->time       = Timer::add(30, function()use($connection){
-            // 30 后没有认证的链接关闭
-            $connection->close();
-        }, null, false);
+        $connection->linkId = uniqid('link_id');
+        Links::push($connection->linkId,$connection);
     }
 
     /**
@@ -47,7 +43,22 @@ class Server extends WorkerMan
      */
     public function onMessage($connection, $data)
     {
-
+        $data = json_decode($data, true);
+        if( empty($data) ){
+            $connection->send( Send::error('Missing parameter') );
+        }elseif( !Users::login($connection) ){
+            if( Users::login($connection, $data)==false ){
+                $connection->send( Send::error('Login failed',4001) );
+            }else{
+                $connection->send( Send::success("Login success") );
+            }
+        }else{
+            if( $data['url'] ){
+                Route::run($data['url'],$data);
+            }else{
+                $connection->send( Send::error('Missing URL parameter') );
+            }
+        }
     }
 
 
@@ -57,7 +68,7 @@ class Server extends WorkerMan
      */
     public function onClose($connection)
     {
-
+        Links::off($connection->linkId);
     }
 
 
