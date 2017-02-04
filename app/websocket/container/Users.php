@@ -11,7 +11,10 @@ namespace app\websocket\container;
 
 class Users
 {
-    private static $_userList;
+    private static $_userList = [
+        'link'=>[],
+        'linkNum'=>0
+    ];
     /**
      * 过滤，验证
      * @param array $data
@@ -22,7 +25,17 @@ class Users
         return $data;
     }
 
-    
+    public static function getLink($userId)
+    {
+        return self::$_userList[$userId]['link'];
+    }
+
+    /**
+     * 是否登录
+     *
+     * @param $connection
+     * @return bool
+     */
     public static function isLogin($connection)
     {
         if( isset($connection->userId) ){
@@ -31,6 +44,13 @@ class Users
         return false;
     }
 
+    /**
+     * 开始登录
+     *
+     * @param $connection
+     * @param $data
+     * @return bool
+     */
     public static function login($connection, $data)
     {
         if( !self::filter($data) ){
