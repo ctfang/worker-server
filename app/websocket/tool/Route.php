@@ -39,8 +39,8 @@ class Route
         }
         $class  = self::$_classList[$class];
         $fun    = $arr[1];
-        self::$_routeList[$key] = function () use ($class,$fun){
-            $class->$fun();
+        self::$_routeList[$key] = function ($data,$connection) use ($class,$fun){
+            $class->$fun($data,$connection);
         };
     }
 
@@ -50,9 +50,14 @@ class Route
      * @param $key
      * @param $data
      */
-    public static function run($key,$data)
+    public static function run($key,$data,$connection)
     {
         $fun = self::$_routeList[$key];
-        $fun($data);
+        $fun($data,$connection);
+    }
+
+    public static function lists()
+    {
+        return array_keys(self::$_routeList);
     }
 }

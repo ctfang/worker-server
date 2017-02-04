@@ -16,7 +16,7 @@ class Send
         return json_encode(array('code'=>$code,'data'=>$string));
     }
 
-    public static function success($string='OK',$code=1000)
+    public static function success($string='OK',$code=0)
     {
         return json_encode(array('code'=>$code,'data'=>$string));
     }

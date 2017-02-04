@@ -11,7 +11,7 @@ namespace app\websocket\controller;
 
 class Home
 {
-    public function test()
+    public function test($data,$connection)
     {
         echo 'OK';
     }

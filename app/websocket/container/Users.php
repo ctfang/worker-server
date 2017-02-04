@@ -36,5 +36,51 @@ class Users
         if( !self::filter($data) ){
             return false;
         }
+        $connection->userId = $data['name'];
+        return self::addCon($connection);
+    }
+
+    /**
+     * 加入用户连接
+     *
+     * @param $connection
+     * @return bool
+     */
+    public static function addCon($connection)
+    {
+        if( isset(self::$_userList[$connection->userId]['linkNum']) ){
+            ++self::$_userList[$connection->userId]['linkNum'];
+        }else{
+            self::$_userList[$connection->userId]['linkNum']  = 1;
+        }
+
+        self::$_userList[$connection->userId]['link'][$connection->linkId]   = $connection;
+
+        return true;
+    }
+
+    /**
+     * 删除用户某个连接
+     * 
+     * @param $connection
+     * @return bool
+     */
+    public static function delCon($connection)
+    {
+        --self::$_userList[$connection->userId]['linkNum'];
+
+        unset(self::$_userList[$connection->userId]['link'][$connection->linkId]);
+
+        return true;
+    }
+
+    /**
+     * 用户推出
+     *
+     * @param $connection
+     */
+    public static function logout($connection)
+    {
+        unset(self::$_userList[$connection->userId]);
     }
 }

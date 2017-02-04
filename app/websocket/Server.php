@@ -44,17 +44,17 @@ class Server extends WorkerMan
     public function onMessage($connection, $data)
     {
         $data = json_decode($data, true);
-        if( empty($data) ){
-            $connection->send( Send::error('Missing parameter') );
-        }elseif( !Users::login($connection) ){
-            if( Users::login($connection, $data)==false ){
+        if( empty($data) && is_array($data) ){
+            Route::run('help',[],$connection);
+        }elseif( !Users::isLogin($connection) ){
+            if( Users::login($connection, $data['data'])==false ){
                 $connection->send( Send::error('Login failed',4001) );
             }else{
                 $connection->send( Send::success("Login success") );
             }
         }else{
             if( $data['url'] ){
-                Route::run($data['url'],$data);
+                Route::run($data['url'],$data['data'],$connection);
             }else{
                 $connection->send( Send::error('Missing URL parameter') );
             }

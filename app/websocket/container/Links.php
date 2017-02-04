@@ -42,6 +42,8 @@ class Links
      */
     public static function off($key)
     {
+        Users::delCon(self::$_list[$key]);
+        
         if(isset(self::$_list[$key])){
             unset(self::$_list[$key]);
         }
